@@ -1,0 +1,78 @@
+.panel {
+  width: min(100% - 2rem, 32rem);
+  margin: clamp(2rem, 8vh, 6rem) auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  padding: clamp(var(--space-6), 5vw, var(--space-8));
+}
+.panelHeader {
+  margin-bottom: var(--space-6);
+}
+.panelHeader h1 {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+}
+.panelHeader > p:last-child {
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+.eyebrow {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.form {
+  display: grid;
+  gap: var(--space-4);
+}
+.form > label {
+  display: grid;
+  gap: var(--space-2);
+  font-weight: 650;
+}
+.form input {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  padding: var(--space-3) var(--space-4);
+}
+.form a {
+  color: var(--color-accent);
+  font-weight: 650;
+  text-underline-offset: 0.2em;
+}
+.formError {
+  border-inline-start: 3px solid var(--color-text);
+  background: var(--color-canvas);
+  padding: var(--space-3);
+}
+.formSuccess {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas);
+  padding: var(--space-3);
+}
+.alternatives {
+  display: grid;
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-4);
+}
+.alternatives p {
+  margin: 0;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+.alternativeLink {
+  display: block;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  text-align: center;
+  text-decoration: none;
+}

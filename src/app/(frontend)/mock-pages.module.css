@@ -1,0 +1,211 @@
+.page {
+  width: min(100% - 2rem, 76rem);
+  margin-inline: auto;
+  padding-bottom: var(--space-12);
+}
+.demoNotice {
+  margin: var(--space-4) 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas);
+  padding: var(--space-3) var(--space-4);
+  font-weight: 700;
+}
+.hero {
+  margin-block: var(--space-6) var(--space-10);
+  border-bottom: 1px solid var(--color-border);
+  padding-block: var(--space-6) var(--space-8);
+}
+.hero h1 {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+}
+.hero > p:last-child {
+  max-width: 60ch;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  line-height: 1.65;
+}
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.section,
+.workedExample {
+  margin-block: var(--space-8);
+}
+.section h2,
+.workedExample h2 {
+  margin: 0 0 var(--space-4);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+.section > p {
+  max-width: 65ch;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+.facts div {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: var(--space-4);
+}
+.facts dt {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+.facts dd {
+  margin: var(--space-2) 0 0;
+  font-weight: 700;
+}
+.sectionTiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sectionTiles a {
+  display: grid;
+  min-height: 8rem;
+  gap: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: var(--space-5);
+  text-decoration: none;
+}
+.sectionTiles a:hover {
+  border-color: var(--color-accent);
+}
+.sectionTiles span {
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+.workedExample {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  padding: clamp(var(--space-5), 4vw, var(--space-8));
+}
+.workedExample > p {
+  line-height: 1.6;
+}
+.exampleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+.exampleGrid h3 {
+  margin-bottom: var(--space-2);
+}
+.exampleGrid p {
+  line-height: 1.6;
+}
+.faqList {
+  display: grid;
+  gap: var(--space-3);
+}
+.faqList details {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: var(--space-4);
+}
+.faqList summary {
+  font-weight: 700;
+  cursor: pointer;
+}
+.faqList p {
+  margin-bottom: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+.courseCallout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-block: var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-canvas);
+  padding: var(--space-6);
+}
+.courseCallout h2 {
+  margin: 0 0 var(--space-2);
+}
+.courseCallout p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+.courseCallout a {
+  color: var(--color-accent);
+  font-weight: 700;
+  text-underline-offset: 0.2em;
+}
+.moduleList {
+  display: grid;
+  gap: var(--space-4);
+  padding-left: 1.5rem;
+}
+.moduleList li {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-3);
+}
+.moduleList h3 {
+  margin: 0;
+}
+.moduleList p {
+  color: var(--color-text-muted);
+}
+.disclaimer {
+  margin-top: var(--space-8);
+  border-inline-start: 3px solid var(--color-border);
+  padding: var(--space-4);
+}
+.disclaimer p {
+  margin-bottom: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+.pageHeader {
+  margin-block: var(--space-8);
+}
+.pageHeader h1 {
+  margin-bottom: var(--space-3);
+}
+.pageHeader > p:last-child {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+.testList {
+  margin-block: var(--space-8);
+}
+.testList h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+.testList ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 42rem) {
+  .exampleGrid {
+    grid-template-columns: 1fr;
+  }
+}

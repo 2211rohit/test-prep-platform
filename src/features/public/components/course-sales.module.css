@@ -1,0 +1,154 @@
+.overview,
+.section,
+.sample,
+.pricePanel,
+.courseCTA {
+  margin-block: var(--space-12);
+}
+
+.overview,
+.sample,
+.pricePanel,
+.courseCTA {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  padding: clamp(var(--space-6), 4vw, var(--space-8));
+}
+
+.overview {
+  max-width: 68rem;
+}
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.lead {
+  max-width: 62ch;
+  margin: var(--space-4) 0 0;
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+.detail {
+  margin-top: var(--space-6);
+}
+.section h2,
+.sample h2,
+.pricePanel h2,
+.courseCTA h2 {
+  margin: 0 0 var(--space-4);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+.moduleList {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.module {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: var(--space-5);
+}
+.moduleHeading {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+.moduleNumber {
+  display: grid;
+  flex: 0 0 2rem;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-canvas);
+  font-weight: 700;
+}
+.module h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.module p {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+}
+.lessonList {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0 3rem;
+  padding: 0;
+  list-style: none;
+}
+.lessonList li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  color: var(--color-text-muted);
+}
+.sample {
+  max-width: 60rem;
+}
+.lessonContent {
+  line-height: 1.7;
+}
+.pricePanel,
+.courseCTA {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+.price {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 750;
+}
+.muted,
+.refundNote {
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+.refundNote {
+  max-width: 50ch;
+  font-size: 0.9rem;
+}
+.actions {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+}
+.actions a:not([class]) {
+  color: var(--color-accent);
+  font-weight: 650;
+  text-underline-offset: 0.2em;
+}
+.courseCTA {
+  background: var(--color-canvas);
+}
+.courseCTA p {
+  max-width: 55ch;
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+@media (max-width: 40rem) {
+  .pricePanel,
+  .courseCTA {
+    align-items: stretch;
+  }
+  .actions {
+    width: 100%;
+  }
+  .lessonList {
+    margin-left: 0;
+  }
+}

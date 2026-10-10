@@ -69,22 +69,54 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    categories: Category;
+    tests: Test;
+    'test-variants': TestVariant;
+    'test-changelog': TestChangelog;
+    pages: Page;
+    faqs: Faq;
+    courses: Course;
+    modules: Module;
+    lessons: Lesson;
+    questions: Question;
+    'quiz-configs': QuizConfig;
+    products: Product;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    tests: {
+      variants: 'test-variants';
+      changeLog: 'test-changelog';
+    };
+    modules: {
+      lessons: 'lessons';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    tests: TestsSelect<false> | TestsSelect<true>;
+    'test-variants': TestVariantsSelect<false> | TestVariantsSelect<true>;
+    'test-changelog': TestChangelogSelect<false> | TestChangelogSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
+    courses: CoursesSelect<false> | CoursesSelect<true>;
+    modules: ModulesSelect<false> | ModulesSelect<true>;
+    lessons: LessonsSelect<false> | LessonsSelect<true>;
+    questions: QuestionsSelect<false> | QuestionsSelect<true>;
+    'quiz-configs': QuizConfigsSelect<false> | QuizConfigsSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
   globals: {};
@@ -122,7 +154,9 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
+  name?: string | null;
+  role: 'learner' | 'editor' | 'admin';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -130,6 +164,7 @@ export interface User {
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   sessions?:
@@ -147,8 +182,12 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
+  /**
+   * Describe the image for screen-reader users and search engines.
+   */
   alt: string;
+  caption?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -160,13 +199,796 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    wide?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  name: string;
+  /**
+   * URL-friendly address. Set it once the page is ready to publish.
+   */
+  slug: string;
+  description?: string | null;
+  sortOrder?: number | null;
+  seo?: {
+    /**
+     * Search result title, up to 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Search result summary, up to 160 characters.
+     */
+    description?: string | null;
+    canonicalUrl?: string | null;
+    socialImage?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tests".
+ */
+export interface Test {
+  id: number;
+  name: string;
+  /**
+   * URL-friendly address. Set it once the page is ready to publish.
+   */
+  slug: string;
+  category: number | Category;
+  publisherName: string;
+  shortDescription: string;
+  /**
+   * Last date the exam format was checked against a reliable source. Demo drafts use a placeholder; replace it with a verified date before approval.
+   */
+  formatVerifiedAt: string;
+  sections?:
+    | {
+        key: string;
+        name: string;
+        overview?: string | null;
+        typicalQuestionCount?: number | null;
+        typicalTimeMinutes?: number | null;
+        cutScore?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  variants?: {
+    docs?: (number | TestVariant)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  changeLog?: {
+    docs?: (number | TestChangelog)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  disclaimer: string;
+  seo?: {
+    /**
+     * Search result title, up to 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Search result summary, up to 160 characters.
+     */
+    description?: string | null;
+    canonicalUrl?: string | null;
+    socialImage?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Optional agency or employer-specific overrides for a test.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "test-variants".
+ */
+export interface TestVariant {
+  id: number;
+  name: string;
+  /**
+   * URL-friendly address. Set it once the page is ready to publish.
+   */
+  slug: string;
+  test: number | Test;
+  overrides?: {
+    /**
+     * Optional section list and order for this variant.
+     */
+    sections?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    /**
+     * Optional overall or per-section cut score overrides.
+     */
+    cutScores?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    /**
+     * Optional section and test timing overrides in seconds.
+     */
+    timing?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    testDayInfo?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "test-changelog".
+ */
+export interface TestChangelog {
+  id: number;
+  title: string;
+  test: number | Test;
+  effectiveOn: string;
+  summary: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Reference used to verify this format change.
+   */
+  source?: string | null;
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly address. Set it once the page is ready to publish.
+   */
+  slug: string;
+  pageType: 'home' | 'category' | 'practice' | 'course-sales' | 'blog' | 'legal' | 'roadmap';
+  test?: (number | null) | Test;
+  content: (
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        body?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        image?: (number | null) | Media;
+        primaryAction?: {
+          label?: string | null;
+          href?: string | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'hero';
+      }
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'rich-text';
+      }
+    | {
+        facts?:
+          | {
+              label: string;
+              value: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'test-facts-table';
+      }
+    | {
+        sections?:
+          | {
+              title: string;
+              anchor: string;
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'section-cards';
+      }
+    | {
+        title: string;
+        questionType?: string | null;
+        example: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        reasoning: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        tip?: string | null;
+        /**
+         * A short practice item. Deliver its answer only after the learner responds.
+         */
+        tryItItem?: (number | null) | Question;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'walkthrough';
+      }
+    | {
+        quizConfig: number | QuizConfig;
+        intro?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'embedded-quiz';
+      }
+    | {
+        heading: string;
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'scoring-explainer';
+      }
+    | {
+        faqs: (number | Faq)[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'faq-references';
+      }
+    | {
+        heading: string;
+        body?: string | null;
+        label: string;
+        href: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'cta';
+      }
+    | {
+        items?:
+          | {
+              quote: string;
+              name: string;
+              context?: string | null;
+              /**
+               * Confirm written permission before publishing this quote.
+               */
+              consentConfirmed: boolean;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'testimonials';
+      }
+    | {
+        publisherName: string;
+        content: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'disclaimer';
+      }
+  )[];
+  seo?: {
+    /**
+     * Search result title, up to 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Search result summary, up to 160 characters.
+     */
+    description?: string | null;
+    canonicalUrl?: string | null;
+    socialImage?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "questions".
+ */
+export interface Question {
+  id: number;
+  /**
+   * Stable content ID used in imports and reports.
+   */
+  internalId: string;
+  test: number | Test;
+  section: string;
+  type:
+    | 'mcq_single'
+    | 'mcq_multi'
+    | 'numeric_entry'
+    | 'text_entry'
+    | 'image_mcq'
+    | 'passage_group'
+    | 'memorization'
+    | 'likert'
+    | 'sjt_rank'
+    | 'grammar_select'
+    | 'attention_detail'
+    | 'sequence';
+  skills?:
+    | {
+        skill: string;
+        id?: string | null;
+      }[]
+    | null;
+  difficulty: number;
+  groupId?: string | null;
+  /**
+   * Confirm this is original material and does not reproduce a proprietary test.
+   */
+  originalContentAttested: boolean;
+  stem: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Type-specific presentation data for the selected item type. Keep answer keys in the separate private answer field.
+   */
+  itemData?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  media?: (number | Media)[] | null;
+  options?:
+    | {
+        id: string;
+        text?: string | null;
+        image?: (number | null) | Media;
+        whyWrong?: string | null;
+        errorType?: ('misread' | 'calculation' | 'concept' | 'trap') | null;
+      }[]
+    | null;
+  /**
+   * Private answer key. Never send this field to a learner before submit.
+   */
+  answer:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  explanation: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  timeLimitSec?: number | null;
+  visibility: 'free' | 'paid';
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "quiz-configs".
+ */
+export interface QuizConfig {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly address. Set it once the page is ready to publish.
+   */
+  slug: string;
+  test: number | Test;
+  mode: 'learn' | 'drill' | 'timed' | 'simulation';
+  navigation: 'free' | 'forward-only' | 'section-locked';
+  accessLevel: 'public' | 'free' | 'full';
+  /**
+   * Selection, timing, section rules, and scoring config. This collection is staff-only.
+   */
+  configuration:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  question: string;
+  answer: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  test?: (number | null) | Test;
+  sortOrder?: number | null;
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly address. Set it once the page is ready to publish.
+   */
+  slug: string;
+  test: number | Test;
+  summary: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Select the content included in this test’s 10-day starter access.
+   */
+  freeStarter: {
+    durationDays: number;
+    includedModules?: (number | Module)[] | null;
+    includedDrills?: (number | QuizConfig)[] | null;
+    includedSimulations?: (number | QuizConfig)[] | null;
+  };
+  seo?: {
+    /**
+     * Search result title, up to 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Search result summary, up to 160 characters.
+     */
+    description?: string | null;
+    canonicalUrl?: string | null;
+    socialImage?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "modules".
+ */
+export interface Module {
+  id: number;
+  title: string;
+  course: number | Course;
+  summary?: string | null;
+  sortOrder: number;
+  accessLevel: 'public' | 'free' | 'full';
+  lessons?: {
+    docs?: (number | Lesson)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lessons".
+ */
+export interface Lesson {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly address. Set it once the page is ready to publish.
+   */
+  slug: string;
+  module: number | Module;
+  sortOrder: number;
+  accessLevel: 'public' | 'free' | 'full';
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Optional drill shown at the end of this lesson.
+   */
+  drill?: (number | null) | QuizConfig;
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  name: string;
+  /**
+   * URL-friendly address. Set it once the page is ready to publish.
+   */
+  slug: string;
+  test: number | Test;
+  courses: (number | Course)[];
+  productType: 'full-prep' | 'extension';
+  tier: 'full';
+  /**
+   * Store money in cents; 2900 means $29.00.
+   */
+  priceCents: number;
+  currency: string;
+  durationDays: number;
+  /**
+   * Only active, approved, published products may be sold.
+   */
+  active?: boolean | null;
+  /**
+   * An administrator must approve content before it is published.
+   */
+  workflowStatus: 'draft' | 'in-review' | 'approved';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,20 +1005,68 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'tests';
+        value: number | Test;
+      } | null)
+    | ({
+        relationTo: 'test-variants';
+        value: number | TestVariant;
+      } | null)
+    | ({
+        relationTo: 'test-changelog';
+        value: number | TestChangelog;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'faqs';
+        value: number | Faq;
+      } | null)
+    | ({
+        relationTo: 'courses';
+        value: number | Course;
+      } | null)
+    | ({
+        relationTo: 'modules';
+        value: number | Module;
+      } | null)
+    | ({
+        relationTo: 'lessons';
+        value: number | Lesson;
+      } | null)
+    | ({
+        relationTo: 'questions';
+        value: number | Question;
+      } | null)
+    | ({
+        relationTo: 'quiz-configs';
+        value: number | QuizConfig;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: number | Product;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -206,10 +1076,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -229,7 +1099,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -240,6 +1110,8 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -247,6 +1119,7 @@ export interface UsersSelect<T extends boolean = true> {
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
+  resetPasswordRequestedAt?: T;
   loginAttempts?: T;
   lockUntil?: T;
   sessions?:
@@ -263,6 +1136,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -274,6 +1148,438 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        wide?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  sortOrder?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalUrl?: T;
+        socialImage?: T;
+        noIndex?: T;
+      };
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tests_select".
+ */
+export interface TestsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  category?: T;
+  publisherName?: T;
+  shortDescription?: T;
+  formatVerifiedAt?: T;
+  sections?:
+    | T
+    | {
+        key?: T;
+        name?: T;
+        overview?: T;
+        typicalQuestionCount?: T;
+        typicalTimeMinutes?: T;
+        cutScore?: T;
+        id?: T;
+      };
+  variants?: T;
+  changeLog?: T;
+  disclaimer?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalUrl?: T;
+        socialImage?: T;
+        noIndex?: T;
+      };
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "test-variants_select".
+ */
+export interface TestVariantsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  test?: T;
+  overrides?:
+    | T
+    | {
+        sections?: T;
+        cutScores?: T;
+        timing?: T;
+        testDayInfo?: T;
+      };
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "test-changelog_select".
+ */
+export interface TestChangelogSelect<T extends boolean = true> {
+  title?: T;
+  test?: T;
+  effectiveOn?: T;
+  summary?: T;
+  source?: T;
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  pageType?: T;
+  test?: T;
+  content?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              image?: T;
+              primaryAction?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'rich-text'?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'test-facts-table'?:
+          | T
+          | {
+              facts?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'section-cards'?:
+          | T
+          | {
+              sections?:
+                | T
+                | {
+                    title?: T;
+                    anchor?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        walkthrough?:
+          | T
+          | {
+              title?: T;
+              questionType?: T;
+              example?: T;
+              reasoning?: T;
+              tip?: T;
+              tryItItem?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'embedded-quiz'?:
+          | T
+          | {
+              quizConfig?: T;
+              intro?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'scoring-explainer'?:
+          | T
+          | {
+              heading?: T;
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'faq-references'?:
+          | T
+          | {
+              faqs?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              label?: T;
+              href?: T;
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    context?: T;
+                    consentConfirmed?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        disclaimer?:
+          | T
+          | {
+              publisherName?: T;
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalUrl?: T;
+        socialImage?: T;
+        noIndex?: T;
+      };
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  question?: T;
+  answer?: T;
+  test?: T;
+  sortOrder?: T;
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses_select".
+ */
+export interface CoursesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  test?: T;
+  summary?: T;
+  description?: T;
+  freeStarter?:
+    | T
+    | {
+        durationDays?: T;
+        includedModules?: T;
+        includedDrills?: T;
+        includedSimulations?: T;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalUrl?: T;
+        socialImage?: T;
+        noIndex?: T;
+      };
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "modules_select".
+ */
+export interface ModulesSelect<T extends boolean = true> {
+  title?: T;
+  course?: T;
+  summary?: T;
+  sortOrder?: T;
+  accessLevel?: T;
+  lessons?: T;
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lessons_select".
+ */
+export interface LessonsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  module?: T;
+  sortOrder?: T;
+  accessLevel?: T;
+  content?: T;
+  drill?: T;
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "questions_select".
+ */
+export interface QuestionsSelect<T extends boolean = true> {
+  internalId?: T;
+  test?: T;
+  section?: T;
+  type?: T;
+  skills?:
+    | T
+    | {
+        skill?: T;
+        id?: T;
+      };
+  difficulty?: T;
+  groupId?: T;
+  originalContentAttested?: T;
+  stem?: T;
+  itemData?: T;
+  media?: T;
+  options?:
+    | T
+    | {
+        id?: T;
+        text?: T;
+        image?: T;
+        whyWrong?: T;
+        errorType?: T;
+      };
+  answer?: T;
+  explanation?: T;
+  timeLimitSec?: T;
+  visibility?: T;
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "quiz-configs_select".
+ */
+export interface QuizConfigsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  test?: T;
+  mode?: T;
+  navigation?: T;
+  accessLevel?: T;
+  configuration?: T;
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  test?: T;
+  courses?: T;
+  productType?: T;
+  tier?: T;
+  priceCents?: T;
+  currency?: T;
+  durationDays?: T;
+  active?: T;
+  workflowStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

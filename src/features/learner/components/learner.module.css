@@ -1,0 +1,387 @@
+.section,
+.courseCard,
+.readiness,
+.lesson,
+.expiredState {
+  margin-block: var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  padding: clamp(var(--space-5), 4vw, var(--space-8));
+}
+.dashboardHeading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-block: var(--space-8);
+}
+.dashboardHeading h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+.eyebrow {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.datePill {
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  padding: var(--space-2) var(--space-4);
+}
+.section h2,
+.readiness h2,
+.lesson h1,
+.expiredState h2 {
+  margin: 0 0 var(--space-4);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+.courseGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: var(--space-4);
+}
+.courseCard {
+  margin: 0;
+}
+.courseCardHeading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.courseCardHeading h2 {
+  margin: 0 0 var(--space-4);
+  font-size: 1.2rem;
+}
+.courseCardHeading h2 a {
+  text-decoration: none;
+}
+.courseCardHeading > span {
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.85rem;
+}
+.courseCard label {
+  display: block;
+  margin-block: var(--space-3) var(--space-2);
+  font-size: 0.9rem;
+}
+.courseCard progress,
+.masteryItem progress {
+  width: 100%;
+  height: 0.75rem;
+  accent-color: var(--color-accent);
+}
+.muted,
+.emptyState {
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+.nextStep {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-4);
+}
+.nextStep p {
+  margin: 0;
+  line-height: 1.55;
+}
+.readiness {
+  max-width: 35rem;
+  background: var(--color-canvas);
+}
+.readiness h2 {
+  margin-bottom: var(--space-2);
+}
+.readiness p:last-child {
+  max-width: 60ch;
+  margin-bottom: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+.readinessScore {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.masteryList {
+  display: grid;
+  gap: var(--space-5);
+}
+.masteryHeading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+.masteryHeading span {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+.sectionHeading {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.planList {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+.planList li {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(6rem, 8rem) minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+.planList time {
+  color: var(--color-text-muted);
+}
+.planList a {
+  font-weight: 650;
+  text-underline-offset: 0.2em;
+}
+.taskComplete {
+  display: grid;
+  width: 1.25rem;
+  height: 1.25rem;
+  place-items: center;
+  border: 1px solid var(--color-accent);
+  border-radius: 50%;
+  font-weight: 700;
+}
+.taskMarker {
+  color: var(--color-text-muted);
+  text-align: center;
+}
+.outline {
+  align-self: start;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  padding: var(--space-5);
+}
+.outline > h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+.outlineModule {
+  border-top: 1px solid var(--color-border);
+  padding-block: var(--space-4);
+}
+.outlineModule h3 {
+  margin: 0 0 var(--space-3);
+  font-size: 1rem;
+}
+.outlineModule ol {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.outlineModule li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  line-height: 1.5;
+}
+.outlineModule li a {
+  text-underline-offset: 0.2em;
+}
+.completionMark {
+  color: var(--color-accent);
+  font-weight: 800;
+}
+.incompleteMark {
+  color: var(--color-text-muted);
+}
+.lockedLesson {
+  flex: 1;
+}
+.lockedLesson summary {
+  cursor: pointer;
+}
+.lockLabel {
+  display: block;
+  margin-left: 1.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+.lockedLesson > div {
+  margin: var(--space-3) 0 0 1.5rem;
+  border-inline-start: 2px solid var(--color-border);
+  padding-left: var(--space-3);
+}
+.lockedLesson > div p {
+  color: var(--color-text-muted);
+}
+.lesson {
+  max-width: 56rem;
+  margin-inline: auto;
+}
+.lessonBody {
+  line-height: 1.75;
+}
+.completionText {
+  display: inline-block;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-3);
+  font-weight: 650;
+}
+.recommendation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-block: var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-canvas);
+  padding: var(--space-6);
+}
+.recommendation h2 {
+  margin: var(--space-2) 0;
+}
+.recommendation p:last-child {
+  margin-bottom: 0;
+  color: var(--color-text-muted);
+}
+.expiryBanner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  padding: var(--space-4);
+}
+.expiryBanner p {
+  margin: 0;
+}
+.expiryBanner a {
+  font-weight: 700;
+}
+.expiredState {
+  max-width: 48rem;
+}
+.expiredState p:not(.eyebrow) {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+.receiptList {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.receiptList li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  padding-block: var(--space-3);
+}
+.receiptList li div {
+  display: grid;
+  gap: var(--space-1);
+}
+.receiptList span {
+  color: var(--color-text-muted);
+}
+.receiptList a {
+  color: var(--color-accent);
+  font-weight: 650;
+}
+.dataActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-5);
+}
+.dataActions form {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+}
+.dataActions input {
+  min-height: 2.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+}
+.dangerButton {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: var(--space-3) var(--space-4);
+  font-weight: 700;
+  cursor: pointer;
+}
+.roadmap {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.roadmap li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-4);
+}
+.roadmapNumber {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  font-weight: 700;
+}
+.roadmap h3 {
+  margin: 0;
+}
+.roadmap p {
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+.roadmap label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+@media (max-width: 40rem) {
+  .planList li {
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+  }
+  .planList time {
+    grid-column: 2;
+  }
+  .planList li > :last-child {
+    grid-column: 2;
+  }
+}
