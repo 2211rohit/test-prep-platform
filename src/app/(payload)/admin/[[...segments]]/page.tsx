@@ -1,24 +1,30 @@
-/* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
-/* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
 import type { Metadata } from 'next'
 
-import config from '@payload-config'
-import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
-import { importMap } from '../importMap'
+import { CmsDemoApp } from '@/features/cms-demo/CmsDemoApp'
 
-type Args = {
-  params: Promise<{
-    segments: string[]
-  }>
-  searchParams: Promise<{
-    [key: string]: string | string[]
-  }>
+type Props = {
+  params: Promise<{ segments: string[] }>
+  searchParams: Promise<{ [key: string]: string | string[] }>
 }
 
-export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
-  generatePageMetadata({ config, params, searchParams })
+const isBrowserDemo = () => process.env.CMS_DEMO_MODE === 'browser'
 
-const Page = ({ params, searchParams }: Args) =>
-  RootPage({ config, params, searchParams, importMap })
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  if (isBrowserDemo()) {
+    return {
+      title: 'CMS browser demo | Test Prep Platform',
+      description: 'A browser-only content management demo with sample records.',
+      robots: { index: false, follow: false },
+    }
+  }
 
-export default Page
+  const { generatePayloadAdminMetadata } = await import('./PayloadAdminPage')
+  return generatePayloadAdminMetadata(props)
+}
+
+export default async function AdminPage(props: Props) {
+  if (isBrowserDemo()) return <CmsDemoApp />
+
+  const { renderPayloadAdminPage } = await import('./PayloadAdminPage')
+  return renderPayloadAdminPage(props)
+}

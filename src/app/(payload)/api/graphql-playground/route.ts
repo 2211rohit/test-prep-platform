@@ -1,7 +1,11 @@
-/* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
-/* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
-import config from '@payload-config'
-import '@payloadcms/next/css'
-import { GRAPHQL_PLAYGROUND_GET } from '@payloadcms/next/routes'
+export async function GET(request: Request) {
+  if (process.env.CMS_DEMO_MODE === 'browser') {
+    return Response.json(
+      { message: 'The Payload GraphQL playground is disabled in the browser-only CMS demo.' },
+      { status: 404 },
+    )
+  }
 
-export const GET = GRAPHQL_PLAYGROUND_GET(config)
+  const { GET: payloadPlayground } = await import('./PayloadPlaygroundHandler')
+  return payloadPlayground(request)
+}

@@ -1,19 +1,27 @@
-/* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
-/* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
-import config from '@payload-config'
-import '@payloadcms/next/css'
-import {
-  REST_DELETE,
-  REST_GET,
-  REST_OPTIONS,
-  REST_PATCH,
-  REST_POST,
-  REST_PUT,
-} from '@payloadcms/next/routes'
+type RouteContext = { params: Promise<{ slug?: string[] }> }
+type RestMethod = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT' | 'OPTIONS'
 
-export const GET = REST_GET(config)
-export const POST = REST_POST(config)
-export const DELETE = REST_DELETE(config)
-export const PATCH = REST_PATCH(config)
-export const PUT = REST_PUT(config)
-export const OPTIONS = REST_OPTIONS(config)
+async function handlePayloadRequest(method: RestMethod, request: Request, context: RouteContext) {
+  if (process.env.CMS_DEMO_MODE === 'browser') {
+    return Response.json(
+      { message: 'Payload APIs are disabled in the browser-only CMS demo.' },
+      { status: 404 },
+    )
+  }
+
+  const handlers = await import('./PayloadRestHandlers')
+  return handlers[method](request, context)
+}
+
+export const GET = (request: Request, context: RouteContext) =>
+  handlePayloadRequest('GET', request, context)
+export const POST = (request: Request, context: RouteContext) =>
+  handlePayloadRequest('POST', request, context)
+export const DELETE = (request: Request, context: RouteContext) =>
+  handlePayloadRequest('DELETE', request, context)
+export const PATCH = (request: Request, context: RouteContext) =>
+  handlePayloadRequest('PATCH', request, context)
+export const PUT = (request: Request, context: RouteContext) =>
+  handlePayloadRequest('PUT', request, context)
+export const OPTIONS = (request: Request, context: RouteContext) =>
+  handlePayloadRequest('OPTIONS', request, context)

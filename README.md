@@ -20,6 +20,12 @@ To run Payload Admin locally:
 
 To load CMS content for a team demo, run `npm run cms:seed-demo` after PostgreSQL is running. It creates or refreshes clearly labeled demo records as drafts in the local database. The command only accepts a local database URL, is safe to rerun, and does not create active products or publish content. Set `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME` in `.env` before the admin bootstrap; do not use real credentials in the demo environment.
 
+## Browser-only CMS preview
+
+For a client preview on Vercel without a hosted database, set `CMS_DEMO_MODE=browser` in the Vercel Preview environment and redeploy. The `/admin` route then shows a demo content studio with sample records. Edits are stored in that visitor's browser only; they are not shared with other reviewers or connected to the public website. User management, media uploads, publishing, Payload APIs, and GraphQL are disabled in this mode. Question answer keys and explanations are omitted. Do not enter real or sensitive data.
+
+Leave `CMS_DEMO_MODE` unset for local development with the real Payload admin. When backend work is approved, configure a persistent database, `PAYLOAD_SECRET`, and migrations, then deploy without browser demo mode.
+
 The PostgreSQL credentials in the Compose file are for local development only. Use managed PostgreSQL credentials in hosted environments. Never commit .env.
 
 ## Project structure
